@@ -24,7 +24,6 @@ jobs:
         run: make build
         env:
           GOBIN: ${{ github.workspace }}/.bin
-          GOWORK: ${{ github.workspace }}/.workdir
 
   release:
     name: Create Release
