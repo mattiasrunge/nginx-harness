@@ -57,7 +57,7 @@ jobs:
 
   container:
     name: Build and Push Container Image
-    needs: release
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
