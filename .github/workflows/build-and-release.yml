@@ -55,8 +55,8 @@ jobs:
         with:
           files: ${{ github.workspace }}/.bin/nginx-harness
 
-  docker:
-    name: Build and Push Docker Image
+  container:
+    name: Build and Push Container Image
     needs: release
     runs-on: ubuntu-latest
     steps:
@@ -69,10 +69,11 @@ jobs:
           name: nginx-harness
           path: ${{ github.workspace }}/.bin
 
-      - name: Build and publish a Docker image for ${{ github.repository }}
+      - name: Build and publish a image for ${{ github.repository }}
         uses: macbre/push-to-ghcr@master
         with:
-          image_name: ${{ github.repository }}  # it will be lowercased internally
+          image_name: ${{ github.repository }}
+          image_tag: ${{ github.ref_name }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Containerfile
 
