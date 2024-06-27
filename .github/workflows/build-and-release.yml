@@ -69,11 +69,18 @@ jobs:
           name: nginx-harness
           path: ${{ github.workspace }}/.bin
 
-      - name: Build and publish a image for ${{ github.repository }}
+      - name: Build and publish a image for ${{ github.repository }} - latest
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{ github.repository }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: Containerfile
+
+      - name: Build and publish a image for ${{ github.repository }} - release
+        if: github.ref_name != 'master'
         uses: macbre/push-to-ghcr@master
         with:
           image_name: ${{ github.repository }}
           image_tag: ${{ github.ref_name }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: Containerfile
-
