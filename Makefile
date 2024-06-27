@@ -22,12 +22,19 @@ bin:
 
 build: bin
 	@echo "Building..."
-	@export CGO_ENABLED=0
-	@$(GOBUILD) -o $(GOBIN)/$(BINARY_NAME) -ldflags -s cmd/*.go
+	CGO_ENABLED=0 $(GOBUILD) -a -o $(GOBIN)/$(BINARY_NAME) --ldflags '-extldflags "-static"' cmd/*.go
 
 run: clean build
-	@mkdir $(GOWORK)
+	@mkdir -p $(GOWORK)
 	@$(GOBIN)/$(BINARY_NAME) -dir $(GOWORK)
+
+container: clean build
+	@echo "Building container..."
+	@podman build -t nginx-harness .
+
+run-container:
+	@mkdir -p $(GOWORK)
+	@podman run --replace -p 9898:9898 -v $(GOWORK):/storage --name nginx-harness nginx-harness
 
 test:
 	@echo "Testing..."
